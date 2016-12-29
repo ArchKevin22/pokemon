@@ -30,7 +30,7 @@ const char FAINTED = 6;
 
 class pokemon {
  public:
-  pokemon(pokeStat base, unsigned iv[], unsigned level, unsigned status);
+  pokemon(pokeStat base, unsigned iv[], unsigned level);
   void makeMoveset();
   void printMoves();
   void setNickName(string s);
@@ -46,27 +46,47 @@ class pokemon {
   unsigned getSplDef();
   unsigned getSpeed();
   unsigned getStatus();
-  void changeStatus(unsigned s);
-  void takeDamage(unsigned dmg);
-  //void useAttack(attack m, pokemon* o);
+  bool changeStatus(unsigned s);
+  bool takeDamage(unsigned dmg);
+  bool raiseAtk(unsigned i);
+  bool lowerAtk(unsigned i);
+  bool raiseDef(unsigned i);
+  bool lowerDef(unsigned i);
+  bool raiseSplAtk(unsigned i);
+  bool lowerSplAtk(unsigned i);
+  bool raiseSplDef(unsigned i);
+  bool lowerSplDef(unsigned i);
+  bool raiseSpeed(unsigned i);
+  bool lowerSpeed(unsigned i);
+  bool raiseAccuracy(unsigned i);
+  bool lowerAccuracy(unsigned i);
+  bool raiseEvasion(unsigned i);
+  bool lowerEvasion(unsigned i);
   void heal_hp(unsigned h);
   void heal_all();
   ~pokemon();
   
 private:
- pokeStat m_pokestat;
- attack moves[4];
- string m_nickname;
- unsigned m_hp;
- unsigned max_hp;
- unsigned m_level;
- unsigned m_exp;
- unsigned m_atk;
- unsigned m_def;
- unsigned m_splAtk;
- unsigned m_splDef;
- unsigned m_speed;
- unsigned m_status;
+  pokeStat m_pokestat;
+  vector<attack> moveList;
+  string m_nickname;
+  unsigned m_hp;
+  unsigned max_hp;
+  unsigned m_level;
+  unsigned m_exp;
+  unsigned m_baseAtk;
+  unsigned m_atk;
+  unsigned m_baseDef;
+  unsigned m_def;
+  unsigned m_baseSplAtk;
+  unsigned m_splAtk;
+  unsigned m_baseSplDef;
+  unsigned m_splDef;
+  unsigned m_baseSpeed;
+  unsigned m_speed;
+  unsigned m_status;
+  unsigned accuracy;
+  unsigned evasion;
 };
 
 #endif

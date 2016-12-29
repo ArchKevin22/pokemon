@@ -27,21 +27,34 @@
  */
 
 pokemon::pokemon(pokeStat base, unsigned iv[], 
-		 unsigned level, unsigned status) : m_pokestat(base), m_nickname(m_pokestat.getName()) {
+		 unsigned level)
+  : m_pokestat(base), m_nickname(m_pokestat.getName()) {
   m_level = level;
-  m_atk = ((((base.getBaseAtk() + iv[0]) << 1) + (sqrt(iv[0] / 4)) * level) / 100) + 5;
-  m_def = ((((base.getBaseDef() + iv[1]) << 1) + (sqrt(iv[1] / 4)) * level) / 100) + 5;
-  m_splAtk = ((((base.getBaseSplAtk() + iv[2]) << 1) + (sqrt(iv[2] / 4)) * level) / 100) + 5;
-  m_splDef = ((((base.getBaseSplDef() + iv[2]) << 1) + (sqrt(iv[2] / 4)) * level) / 100) + 5;
-  m_speed = ((((base.getBaseSpeed() + iv[3]) << 1) + (sqrt(iv[3] / 4)) * level) / 100) + 5;
+  m_baseAtk = ((((base.getBaseAtk() + iv[0]) << 1) + (sqrt(iv[0] / 4)) * level) / 100) + 5;
+  m_atk = m_baseAtk;
+  m_baseDef = ((((base.getBaseDef() + iv[1]) << 1) + (sqrt(iv[1] / 4)) * level) / 100) + 5;
+  m_def = m_baseDef;
+  m_baseSplAtk = ((((base.getBaseSplAtk() + iv[2]) << 1) + (sqrt(iv[2] / 4)) * level) / 100) + 5;
+  m_splAtk = m_baseSplAtk;
+  m_baseSplDef = ((((base.getBaseSplDef() + iv[2]) << 1) + (sqrt(iv[2] / 4)) * level) / 100) + 5;
+  m_splDef = m_baseSplDef;
+  m_baseSpeed = ((((base.getBaseSpeed() + iv[3]) << 1) + (sqrt(iv[3] / 4)) * level) / 100) + 5;
+  m_speed = m_baseSpeed;
   unsigned hp_iv = ((iv[0] & 1) << 3) + ((iv[1] & 1) << 2) + ((iv[3] & 1) << 1) + (iv[2] & 1);
   m_hp = ((((base.getBaseHP() + hp_iv) << 1) + (sqrt(hp_iv) / 4)) * level / 100) + level + 10;
   max_hp = m_hp;
+  m_status = 0;
+  accuracy = 100;
+  evasion = 100;
+  makeMoveset();
 }
 
 void pokemon::makeMoveset() {
-  //make sure that a pokemon has at least two moves and that they
-  //are the same type as the pokemon itself
+  //TODO: generate different moves for each pokemon
+  moveList.push_back(struggle());
+  moveList.push_back(attack());
+  moveList.push_back(attack());
+  moveList.push_back(attack());
 }
 
 void pokemon::setNickName(string s) {
@@ -61,36 +74,44 @@ unsigned pokemon::getSplDef() { return m_splDef; }
 unsigned pokemon::getSpeed() { return m_speed; }
 unsigned pokemon::getStatus() { return m_status; }
 
-void printMoves() {
-  cout << moves[0].getName() << setw(15) << moves[1].getName() << endl;
-  cout << moves[2].getName() << setw(15) << moves[3].getName() << endl;
+
+
+void pokemon::printMoves() {
+  cout << moveList[0].getName() << setw(20) << '\t' << moveList[1].getName() << endl;
+  cout << moveList[2].getName() << setw(20) << '\t' << moveList[3].getName() << endl;
 }
 
 //changes status
-void pokemon::changeStatus(unsigned s) {
-  m_status = s;
+bool pokemon::changeStatus(unsigned s) {
+  if (m_status != s) {
+    m_status = s;
+    return 1;
+  }
+  return 0;
 }
 
 //returns new HP
-void pokemon::takeDamage(unsigned dmg) {
+bool pokemon::takeDamage(unsigned dmg) {
+  bool alive = 1;
   unsigned newHP = m_hp - dmg;
   newHP &= -(newHP <= m_hp);
-  if (newHP == 0)
+  if (newHP == 0) {
     changeStatus(FAINTED);
+    alive = 0;
+  }
   m_hp = newHP;
+  return alive;
 }
-/*
-void pokemon::useAttack(attack m, pokemon* o)  {
-  double type = (m.getType().effectiveness(o -> getBaseStats().getType1())) * m.getType().effectiveness(
-    o -> getBaseStats.getType2());
-  double stab = 1;
-  if (getBaseStats().getType() == m.getType())
-    stab += 0.5;
-   double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-  unsigned damage = ((((m_level << 1) + 10) / 250) * (m_atk / m_def) * m.getPower() + 2) * modifier;
-  o -> takeDamage(damage);
+
+bool pokemon::lowerAtk(unsigned i) {
+  unsigned minimum = m_baseAtk - 6;
+  if (getAtk() <= minimum) {
+    return 0;
+  }
+  m_atk -= i;
+  return 1;
 }
-*/
+
 void pokemon::heal_hp(unsigned h) {
   if (m_status == FAINTED) {
     cout << "You can't heal a fainted pokemon!" << endl;
@@ -105,8 +126,8 @@ void pokemon::heal_hp(unsigned h) {
 void pokemon::heal_all() {
   m_status = NONE;
   heal_hp(MAX_HP_POSSIBLE);
-  //  for (int i = 0; i < moves.size(); i++)
-  //moves[i].heal_pp(MAX_PP_POSSIBLE);
+  for (int i = 0; i < moveList.size(); i++)
+    moveList[i].heal_pp(MAX_PP_POSSIBLE);
 }
 
 pokemon::~pokemon() {

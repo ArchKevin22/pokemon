@@ -2,8 +2,11 @@
 #define MOVEDB_H
 
 #include "typedb.h"
+#include "pokemon.h"
 #include <string>
 using namespace std;
+
+class pokemon;
 
 class attack {
  public:
@@ -15,7 +18,8 @@ class attack {
   string getName();
   unsigned getPP();
   unsigned getMaxPP();
-  bool useMove();
+  virtual void useMove(pokemon* o);
+  virtual bool usePP();
   void heal_pp(unsigned n);
   bool add_maxpp();
 
@@ -29,9 +33,11 @@ class attack {
   unsigned pp_increase;
 };
 
-class ember : public attack {
+class struggle : public attack {
  public:
-  ember();
+  struggle();
+  virtual bool usePP();
+  virtual void useMove(pokemon* self, pokemon* o);
 };
 
 #endif

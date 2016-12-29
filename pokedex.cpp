@@ -7,12 +7,18 @@ using namespace std;
   For type parameter, sorting by:
   1 = Alphabetical Order
   2 = Pokedex number
+  3 = Highest HP Stat
+  4 = Highest Attack Stat
+  5 = Highest Defense Stat
+  6 = Highest Special Attack Stat
+  7 = Highest Special Defense Stat
+  8 = Highest Speed Stat
 */
 
 //this is a very hacky way of making a pokedex, looking for a more efficient way
 //to do this.
 pokedex::pokedex() {
-  size = 9;
+  size = 51;
   m_pokedex[0] = new bulbasaur();
   m_pokedex[1] = new ivysaur();
   m_pokedex[2] = new venusaur();
@@ -22,20 +28,170 @@ pokedex::pokedex() {
   m_pokedex[6] = new squirtle();
   m_pokedex[7] = new wartortle();
   m_pokedex[8] = new blastoise();
+  m_pokedex[9] = new caterpie();
+  m_pokedex[10] = new metapod();
+  m_pokedex[11] = new butterfree();
+  m_pokedex[12] = new weedle();
+  m_pokedex[13] = new kakuna();
+  m_pokedex[14] = new beedrill();
+  m_pokedex[15] = new pidgey();
+  m_pokedex[16] = new pidgeotto();
+  m_pokedex[17] = new pidgeot();
+  m_pokedex[18] = new rattata();
+  m_pokedex[19] = new raticate();
+  m_pokedex[20] = new spearow();
+  m_pokedex[21] = new fearow();
+  m_pokedex[22] = new ekans();
+  m_pokedex[23] = new arbok();
+  m_pokedex[24] = new pikachu();
+  m_pokedex[25] = new raichu();
+  m_pokedex[26] = new sandshrew();
+  m_pokedex[27] = new sandslash();
+  m_pokedex[28] = new nidoranF();
+  m_pokedex[29] = new nidorina();
+  m_pokedex[30] = new nidoqueen();
+  m_pokedex[31] = new nidoranM();
+  m_pokedex[32] = new nidorino();
+  m_pokedex[33] = new nidoking();
+  m_pokedex[34] = new clefairy();
+  m_pokedex[35] = new clefable();
+  m_pokedex[36] = new vulpix();
+  m_pokedex[37] = new ninetales();
+  m_pokedex[38] = new jigglypuff();
+  m_pokedex[39] = new wigglytuff();
+  m_pokedex[40] = new zubat();
+  m_pokedex[41] = new golbat();
+  m_pokedex[42] = new oddish();
+  m_pokedex[43] = new gloom();
+  m_pokedex[44] = new vileplume();
+  m_pokedex[45] = new paras();
+  m_pokedex[46] = new parasect();
+  m_pokedex[47] = new venonat();
+  m_pokedex[48] = new venomoth();
+  m_pokedex[49] = new diglett();
+  m_pokedex[50] = new dugtrio();
+  m_pokedex[51] = new meowth();
+  m_pokedex[52] = new persian();
+  m_pokedex[53] = new psyduck();
+  m_pokedex[54] = new golduck();
+  m_pokedex[55] = new mankey();
+  m_pokedex[56] = new primeape();
+  m_pokedex[57] = new growlithe();
+  m_pokedex[58] = new arcanine();
+  m_pokedex[59] = new poliwag();
+  m_pokedex[60] = new poliwhirl();
+  m_pokedex[61] = new poliwrath();
+  m_pokedex[62] = new abra();
+  m_pokedex[63] = new kadabra();
+  m_pokedex[64] = new alakazam();
+  m_pokedex[65] = new machop();
+  m_pokedex[66] = new machoke();
+  m_pokedex[67] = new machamp();
+  m_pokedex[68] = new bellsprout();
+  m_pokedex[69] = new weepinbell();
+  m_pokedex[70] = new victreebel();
+  m_pokedex[71] = new tentacool();
+  m_pokedex[72] = new tentacruel();
+  m_pokedex[73] = new geodude();
+  m_pokedex[74] = new graveler();
+  m_pokedex[75] = new golem();
+  m_pokedex[76] = new ponyta();
+  m_pokedex[77] = new rapidash();
+  m_pokedex[78] = new slowpoke();
+  m_pokedex[79] = new slowbro();
+  m_pokedex[80] = new magnemite();
+  m_pokedex[81] = new magneton();
+  m_pokedex[82] = new farfetchD();
+  m_pokedex[83] = new doduo();
+  m_pokedex[84] = new dodrio();
+  m_pokedex[85] = new seel();
+  m_pokedex[86] = new dewgong();
+  m_pokedex[87] = new grimer();
+  m_pokedex[88] = new muk();
+  m_pokedex[89] = new shellder();
+  m_pokedex[90] = new cloyster();
+  m_pokedex[91] = new gastly();
+  m_pokedex[92] = new haunter();
+  m_pokedex[93] = new gengar();
+  m_pokedex[94] = new onix();
+  m_pokedex[95] = new drowzee();
+  m_pokedex[96] = new hypno();
+  m_pokedex[97] = new krabby();
+  m_pokedex[98] = new kingler();
+  m_pokedex[99] = new voltorb();
+  m_pokedex[100] = new electrode();
+  m_pokedex[101] = new exeggcute();
+  m_pokedex[102] = new exeggutor();
+  m_pokedex[103] = new cubone();
+  m_pokedex[104] = new marowak();
+  m_pokedex[105] = new hitmonlee();
+  m_pokedex[106] = new hitmonchan();
+  m_pokedex[107] = new lickitung();
+  m_pokedex[108] = new koffing();
+  m_pokedex[109] = new weezing();
+  m_pokedex[110] = new rhyhorn();
+  m_pokedex[111] = new rhydon();
+  m_pokedex[112] = new chansey();
+  m_pokedex[113] = new tangela();
+  m_pokedex[114] = new kangaskhan();
+  m_pokedex[115] = new horsea();
+  m_pokedex[116] = new seadra();
+  m_pokedex[117] = new goldeen();
+  m_pokedex[118] = new seaking();
+  m_pokedex[119] = new staryu();
+  m_pokedex[120] = new starmie();
+  m_pokedex[121] = new mrMime();
+  m_pokedex[122] = new scyther();
+  m_pokedex[123] = new jynx();
+  m_pokedex[124] = new electabuzz();
+  m_pokedex[125] = new magmar();
+  m_pokedex[126] = new pinsir();
+  m_pokedex[127] = new tauros();
+  m_pokedex[128] = new magikarp();
+  m_pokedex[129] = new gyarados();
+  m_pokedex[130] = new lapras();
+  m_pokedex[131] = new ditto();
+  m_pokedex[132] = new eevee();
+  m_pokedex[133] = new vaporeon();
+  m_pokedex[134] = new jolteon();
+  m_pokedex[135] = new flareon();
+  m_pokedex[136] = new porygon();
+  m_pokedex[137] = new omanyte();
+  m_pokedex[138] = new omastar();
+  m_pokedex[139] = new kabuto();
+  m_pokedex[140] = new kabutops();
+  m_pokedex[141] = new aerodactyl();
+  m_pokedex[142] = new snorlax();
+  m_pokedex[143] = new articuno();
+  m_pokedex[144] = new zapdos();
+  m_pokedex[145] = new moltres();
+  m_pokedex[146] = new dratini();
+  m_pokedex[147] = new dragonair();
+  m_pokedex[148] = new dragonite();
+  m_pokedex[149] = new mewtwo();
+  m_pokedex[150] = new mew();
 }
 
 void pokedex::print() {
-  cout << "Name" << setw(15) << "\t\t" << "Type" << endl;
-  for (int i = 0; i < size; i++)
-    cout << m_pokedex[i] -> getName() << setw(15) << "\t\t" << m_pokedex[i] -> getType1().getName() << endl;
+  cout << "Name" << setw(15) << "\t\t" << "Type 1" << setw(15) << "\t\t" << "Type 2" << endl;
+  for (int i = 0; i < size; i++) {
+    cout << m_pokedex[i] -> getName() << setw(15) << "\t\t" << m_pokedex[i] -> getType1().getName();
+  if (m_pokedex[i] -> getType2().getName() == "NULL")
+    cout << endl;
+  else
+    cout << setw(15) << "\t\t" << m_pokedex[i] -> getType2().getName() << endl;
+  }
 }
 
 void pokedex::showEntry(int i) {
-  cout << m_pokedex[i-1] -> getName() << setw(15) << "\t"  << "#: " << m_pokedex[i-1] -> getNum() + 1 << '\n' << 
-    m_pokedex[i-1] -> getDesc() << '\n' << "Base stats:" << endl;
+  cout << m_pokedex[i-1] -> getName() << setw(15) << "\t"  << "#: " << m_pokedex[i-1] -> getNum() + 1 << '\n' 
+       << "Base stats:" << endl;
   cout << "HP: "<< m_pokedex[i-1] -> getBaseHP() << '\n' << 
     "Attack: " << m_pokedex[i-1] -> getBaseAtk() << '\n' <<
-    "Defense: " << m_pokedex[i-1] -> getBaseAtk() << '\n';
+    "Defense: " << m_pokedex[i-1] -> getBaseAtk() << '\n' <<
+    "Special Attack: " << m_pokedex[i-1] -> getBaseSplAtk() << '\n' <<
+    "Special Defense: " << m_pokedex[i-1] -> getBaseSplDef() << '\n' <<
+    "Speed: " << m_pokedex[i-1] -> getBaseSpeed() << endl;
 }
 
 void pokedex::sortBy(int i) {
