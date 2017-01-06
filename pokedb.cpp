@@ -177,6 +177,18 @@ pokeStat::pokeStat(unsigned n, string nm, unsigned h, unsigned a,
     base_speed = speed;
 }
 
+pokeStat::pokeStat(const pokeStat& old)
+  : m_type1(old.m_type1), m_type2(old.m_type2) {
+  object_id = old.object_id;
+  name = old.name;
+  base_hp = old.base_hp;
+  base_atk = old.base_atk;
+  base_def = old.base_def;
+  base_splatk = old.base_splatk;
+  base_spldef = old.base_spldef;
+  base_speed = old.base_speed;
+}
+
 unsigned pokeStat::getNum() { return object_id; }
 string pokeStat::getName() { return name; }
 type pokeStat::getType1() { return m_type1; }

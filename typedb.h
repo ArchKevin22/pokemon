@@ -5,8 +5,9 @@
 using namespace std;
 
 class type {
- public:
+public:
   type(string s);
+  type(const type& old);
   bool operator==(type other);
   double effectiveness(string s);
   string getName();

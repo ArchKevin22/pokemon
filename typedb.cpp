@@ -11,6 +11,9 @@ type::type(string s) {
     name = s;
 }
 
+type::type(const type& old) {
+  name = old.name; 
+}
 bool type::operator==(type other) {
   return name == other.getName();
 }

@@ -7,6 +7,8 @@
 
 #include "movedb.h"
 #include <ctime>
+#include <iostream>
+using namespace std;
 
 swift::swift() : attack("swift", 60, 20, "normal") {}
 
@@ -17,6 +19,7 @@ bool splash::useMove(pokemon* self, pokemon* o) {
     cout << "But nothing happened!" << endl;
     return true;
   }
+  cout << "There's no more PP left for this move!" << endl;
   return false;
 }
 
@@ -98,13 +101,16 @@ bool attack::useMove(pokemon* self, pokemon* o)  {
     double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
       getType().effectiveness(o->getBaseStats().getType2().getName());
     double stab = 1;
-    if (o->getBaseStats().getType1() == getType() || o->getBaseStats().getType2() == getType())
+    if (o->getBaseStats().getType1() == m_type || o->getBaseStats().getType2() == m_type)
       stab += 0.5;
     srand(time(NULL));
     double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
     unsigned damage = ((((double)(o->getLevel() << 1) + 10) / 250) *
-		       ((double)o->getAtk() / (double)o->getDef()) * (double)getPower() + 2) * modifier;
+		       ((double)o->getAtk() / (double)o->getDef()) * (double)m_power + 2) * modifier;
     o->takeDamage(damage);
+    if (type == 0) {
+      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
     return true;
   }
   else {

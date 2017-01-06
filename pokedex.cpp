@@ -172,6 +172,10 @@ pokedex::pokedex() {
   m_pokedex[150] = new mew();
 }
 
+pokeStat* pokedex::getEntryAt(int i) {
+  return m_pokedex[i];
+}
+
 void pokedex::print() {
   cout << "Name" << setw(15) << "\t\t" << "Type 1" << setw(15) << "\t\t" << "Type 2" << endl;
   for (int i = 0; i < size; i++) {

@@ -3,6 +3,7 @@
  * 0 = player's turn, 1 = cpu's turn
  */
 
+#include "pokedex.h"
 #include "pokemon.h"
 
 class arena {
@@ -13,6 +14,7 @@ class arena {
   void takeTurn();
   ~arena();
  private:
+  pokedex p;
   pokeStat* trainer;
   pokeStat* cpu;
   pokemon* player;

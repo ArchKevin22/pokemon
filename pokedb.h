@@ -11,6 +11,7 @@ class pokeStat {
  public:
   pokeStat(unsigned n, string nm, unsigned h, unsigned a, 
 	   unsigned def, unsigned splatk, unsigned spldef, unsigned speed, string t1, string t2);
+  pokeStat(const pokeStat &old);
   unsigned getNum();
   string getName();
   type getType1();

@@ -11,6 +11,7 @@ static int NAME = 3;
 class pokedex {
  public:
   pokedex();
+  pokeStat* getEntryAt(int i);
   void print();
   void showEntry(int i);
   void sortBy(int i);
