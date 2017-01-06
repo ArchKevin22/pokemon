@@ -50,11 +50,22 @@ pokemon::pokemon(pokeStat base, unsigned iv[],
 }
 
 void pokemon::makeMoveset() {
-  //TODO: generate different moves for each pokemon
-  moveList.push_back(struggle());
-  moveList.push_back(attack());
-  moveList.push_back(attack());
-  moveList.push_back(attack());
+  /* TODO: generate different moves for each pokemon
+   * vector<attack> moves = getBaseStats().getMovePool();
+   * If there are less than 4 learnable moves, make the remaining ints
+   * 0, where 0 is the null move. */
+  //int move1 = random int
+  //int move2 = random int
+  //int move3 = random int
+  //int move4 = random int
+  moveList.push_back(new struggle());
+  moveList.push_back(new swift());
+  moveList.push_back(new splash());
+  moveList.push_back(new dragon_rage());
+}
+
+attack* pokemon::getMove(int i) {
+  return moveList[i-1];
 }
 
 void pokemon::setNickName(string s) {
@@ -77,8 +88,10 @@ unsigned pokemon::getStatus() { return m_status; }
 
 
 void pokemon::printMoves() {
-  cout << moveList[0].getName() << setw(20) << '\t' << moveList[1].getName() << endl;
-  cout << moveList[2].getName() << setw(20) << '\t' << moveList[3].getName() << endl;
+  cout << moveList[0]->getName() << " PP: " << moveList[0]->getPP() << '/' << moveList[0]->getMaxPP() << endl;
+  cout << moveList[1]->getName() << " PP: " << moveList[1]->getPP() << '/' << moveList[1]->getMaxPP() << endl;
+  cout << moveList[2]->getName() << " PP: " << moveList[2]->getPP() << '/' << moveList[2]->getMaxPP() << endl;
+  cout << moveList[3]->getName() << " PP: " << moveList[3]->getPP() << '/' << moveList[3]->getMaxPP() << endl;
 }
 
 //changes status
@@ -93,13 +106,14 @@ bool pokemon::changeStatus(unsigned s) {
 //returns new HP
 bool pokemon::takeDamage(unsigned dmg) {
   bool alive = 1;
-  unsigned newHP = m_hp - dmg;
-  newHP &= -(newHP <= m_hp);
-  if (newHP == 0) {
+  int newHP = m_hp - dmg;
+  if (newHP < 0)
+    newHP = 0;
+   if (newHP <= 0) {
     changeStatus(FAINTED);
     alive = 0;
   }
-  m_hp = newHP;
+   m_hp = (unsigned)newHP;
   return alive;
 }
 
@@ -127,9 +141,11 @@ void pokemon::heal_all() {
   m_status = NONE;
   heal_hp(MAX_HP_POSSIBLE);
   for (int i = 0; i < moveList.size(); i++)
-    moveList[i].heal_pp(MAX_PP_POSSIBLE);
+    moveList[i]->heal_pp(MAX_PP_POSSIBLE);
 }
 
 pokemon::~pokemon() {
+  for (int i = 0; i < 4; i++)
+    delete moveList[i];
   cout << m_nickname << " has been released to the wild." << endl;
 }

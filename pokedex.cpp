@@ -18,7 +18,7 @@ using namespace std;
 //this is a very hacky way of making a pokedex, looking for a more efficient way
 //to do this.
 pokedex::pokedex() {
-  size = 51;
+  size = 151;
   m_pokedex[0] = new bulbasaur();
   m_pokedex[1] = new ivysaur();
   m_pokedex[2] = new venusaur();

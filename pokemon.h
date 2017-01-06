@@ -36,6 +36,7 @@ class pokemon {
   void setNickName(string s);
   string getNickName();
   string getName();
+  attack* getMove(int i);
   pokeStat getBaseStats();
   unsigned getHP();
   unsigned getLevel();
@@ -68,7 +69,7 @@ class pokemon {
   
 private:
   pokeStat m_pokestat;
-  vector<attack> moveList;
+  vector<attack*> moveList;
   string m_nickname;
   unsigned m_hp;
   unsigned max_hp;

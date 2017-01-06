@@ -7,18 +7,41 @@
 
 #include "movedb.h"
 
+swift::swift() : attack("swift", 60, 20, "normal") {}
+
+splash::splash() : attack("splash", 0, 40, "normal") {}
+
+bool splash::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    cout << "But nothing happened!" << endl;
+    return true;
+  }
+  return false;
+}
+
+dragon_rage::dragon_rage() : attack("dragon rage", 0, 10, "dragon") {}
+
+bool dragon_rage::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    o->takeDamage(40);
+    return true;
+  }
+  return false;
+}
+
 struggle::struggle() : attack("struggle", 50, 1, "normal") {}
 
 bool struggle::usePP() { return 1; }
 
 //struggle is a "typeless move", meaning it unaffected by type nor does it have STAB
 //The pokemon that used it will also have recoil damage.
-void struggle::useMove(pokemon* self, pokemon* o) {
+bool struggle::useMove(pokemon* self, pokemon* o) {
   double modifier = ((((double)(rand() % 16)) / 100) + 0.85);
   unsigned damage = ((((o->getLevel() << 1) + 10) / 250) * (o->getAtk() / o->getDef()) * getPower() + 2) * modifier;
   unsigned recoil = damage / 4;
   o->takeDamage(damage);
   self->takeDamage(recoil);
+  return true;
 }
 
 attack::attack() : name("-"), m_type("NULL") {
@@ -67,13 +90,20 @@ bool attack::add_maxpp() {
   return 0;
 }
 
-void attack::useMove(pokemon* o)  {
-  double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-    getType().effectiveness(o->getBaseStats().getType2().getName());
-  double stab = 1;
-  if (o->getBaseStats().getType1() == getType())
-    stab += 0.5;
-  double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-  unsigned damage = ((((o->getLevel() << 1) + 10) / 250) * (o->getAtk() / o->getDef()) * getPower() + 2) * modifier;
-  o->takeDamage(damage);
+bool attack::useMove(pokemon* self, pokemon* o)  {
+  if (usePP()) {
+    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+      getType().effectiveness(o->getBaseStats().getType2().getName());
+    double stab = 1;
+    if (o->getBaseStats().getType1() == getType())
+      stab += 0.5;
+    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+    unsigned damage = ((((o->getLevel() << 1) + 10) / 250) * (o->getAtk() / o->getDef()) * getPower() + 2) * modifier;
+    o->takeDamage(damage);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
 }

@@ -7,10 +7,10 @@
 #include "typedb.h"
 #include "pokedex.h"
 #include "movedb.h"
+#include "arena.h"
 using namespace std;
 
 int main() {
-  unsigned iv[] = {1, 2, 3, 4};
-  pokemon c(charmander(), iv, 10);
-  c.printMoves();
+  arena a;
+  a.play();
 }

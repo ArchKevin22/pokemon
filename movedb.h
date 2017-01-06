@@ -18,7 +18,7 @@ class attack {
   string getName();
   unsigned getPP();
   unsigned getMaxPP();
-  virtual void useMove(pokemon* o);
+  virtual bool useMove(pokemon* self, pokemon* o);
   virtual bool usePP();
   void heal_pp(unsigned n);
   bool add_maxpp();
@@ -37,7 +37,24 @@ class struggle : public attack {
  public:
   struggle();
   virtual bool usePP();
-  virtual void useMove(pokemon* self, pokemon* o);
+  virtual bool useMove(pokemon* self, pokemon* o);
+};
+
+class swift : public attack {
+public:
+  swift();
+};
+
+class splash : public attack {
+public:
+  splash();
+  virtual bool useMove(pokemon* self, pokemon* o);
+};
+
+class dragon_rage : public attack {
+public:
+  dragon_rage();
+  virtual bool useMove(pokemon *self, pokemon* o);
 };
 
 #endif
