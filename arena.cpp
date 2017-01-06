@@ -1,5 +1,6 @@
 #include "arena.h"
 #include <cstdlib>
+#include <ctime>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -14,7 +15,9 @@ arena::~arena() {
 }
 
 void arena::play() {
-  cout << player->getNickName() << " vs. " << opponent->getNickName() << endl;
+  cout << player->getNickName() << " level " << player->getLevel()
+       << " vs. " << opponent->getNickName() << " level " << opponent->getLevel() << endl;
+  cout << "------------------------" << endl;
   while(player->getHP() > 0 && opponent->getHP() > 0) {
     cout << player->getNickName() << " HP: " << player->getHP() << endl;
     cout << opponent->getNickName() << " HP: " << opponent->getHP() << endl;
@@ -41,6 +44,7 @@ void arena::play() {
       cout << player->getNickName() << " used " << player->getMove(a)->getName() << "!" << endl;
       player->getMove(a)->useMove(player, opponent);
     }
+    cout << "---------------------------" << endl;
   }
   if (player->getHP() == 0)
     cout << "The opponent won!" << endl;
@@ -54,6 +58,7 @@ void arena::play() {
 
 void arena::generatePokemon() {
   int a[2];
+  srand(time(NULL));
   a[0] = rand() % 151 + 1;
   a[1] = rand() % 151 + 1;
   switch (a[0]) {

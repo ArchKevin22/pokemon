@@ -11,6 +11,8 @@
 using namespace std;
 
 int main() {
+  pokedex p;
   arena a;
+  
   a.play();
 }
