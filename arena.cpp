@@ -6,15 +6,33 @@
 using namespace std;
 
 arena::arena() {
-  generatePokemon();
+ 
+}
+
+void arena::intro() {
+  int a;
+  cout << "Press 1 to face an opponent or 2 to view the pokedex" << endl;
+  cin >> a;
+  while (a != 1 && a != 2) {
+    cout << "Invalid input, please try again." << endl;
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cin >> a;
+  }
+  switch(a) {
+  case 1:
+    play();
+    break;
+  case 2:
+    p.viewer();
+  }
 }
 
 arena::~arena() {
-  delete player;
-  delete opponent;
 }
 
 void arena::play() {
+  generatePokemon();
   cout << player->getNickName() << " level " << player->getLevel()
        << " vs. " << opponent->getNickName() << " level " << opponent->getLevel() << endl;
   cout << "------------------------" << endl;
@@ -59,8 +77,8 @@ void arena::play() {
 void arena::generatePokemon() {
   int a[2];
   srand(time(NULL));
-  a[0] = rand() % 151;
-  a[1] = rand() % 151;
+  a[0] = rand() % 151 + 1;
+  a[1] = rand() % 151 + 1;
   trainer = p.getEntryAt(a[0]);
   cpu = p.getEntryAt(a[1]);
   unsigned iv1[4];

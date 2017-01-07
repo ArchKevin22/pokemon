@@ -173,13 +173,41 @@ pokedex::pokedex() {
 }
 
 pokeStat* pokedex::getEntryAt(int i) {
-  return m_pokedex[i];
+  return m_pokedex[i-1];
 }
 
+void pokedex::viewer() {
+  print();
+  for(;;) {
+    int a;
+    int b;
+    cout << "Press 1-151 to view a pokedex entry or 0 to sort. Press Ctrl-C or input anything else to exit." << endl;
+    cin >> a;
+    if (!cin || a > 151 || a < 0) {
+      exit(0);
+    }
+    else if (a == 0) {
+      cout << "How would you like to sort it? Input 1 for name, 2 for national pokedex number, "
+	   << "and 3 for base attack stat (in descending order)." << endl;
+      cin >> b;
+      while (b > 3 || b < 1) {
+	cin.clear();
+	cout << "Invalid input. Please try again." << endl;
+	cin >> b;
+      }
+      sortBy(b);
+      print();
+    }
+    else {
+      showEntry(a);
+    }
+  }
+}   
+
 void pokedex::print() {
-  cout << "Name" << setw(15) << "\t\t" << "Type 1" << setw(15) << "\t\t" << "Type 2" << endl;
+  cout << "#" << "\t" << "Name" << setw(15) << "\t\t" << "Type 1" << setw(15) << "\t\t" << "Type 2" << endl;
   for (int i = 0; i < size; i++) {
-    cout << m_pokedex[i] -> getName() << setw(15) << "\t\t" << m_pokedex[i] -> getType1().getName();
+    cout << i + 1 << "\t" << m_pokedex[i] -> getName() << setw(15) << "\t\t" << m_pokedex[i] -> getType1().getName();
   if (m_pokedex[i] -> getType2().getName() == "NULL")
     cout << endl;
   else
@@ -188,7 +216,8 @@ void pokedex::print() {
 }
 
 void pokedex::showEntry(int i) {
-  cout << m_pokedex[i-1] -> getName() << setw(15) << "\t"  << "#: " << m_pokedex[i-1] -> getNum() + 1 << '\n' 
+  cout << m_pokedex[i-1] -> getName() << setw(15) << "\t"
+       << "National Pokedex #: " << m_pokedex[i-1] -> getNum() + 1 << '\n' 
        << "Base stats:" << endl;
   cout << "HP: "<< m_pokedex[i-1] -> getBaseHP() << '\n' << 
     "Attack: " << m_pokedex[i-1] -> getBaseAtk() << '\n' <<
@@ -219,16 +248,6 @@ void pokedex::merge(int type, int left, int mid, int right) {
 	mid++;
       }
     }
-    while (left <= left_end) {
-      temp[temp_pos] = m_pokedex[left];
-      left++;
-      temp_pos++;
-    }
-    while (mid <= right) {
-      temp[temp_pos] = m_pokedex[mid];
-      mid++;
-      temp_pos++;
-    }
     break;
   case 2:
     while (left <= left_end && mid <= right) {
@@ -243,16 +262,31 @@ void pokedex::merge(int type, int left, int mid, int right) {
 	mid++;
       }
     }
-    while (left <= left_end) {
-      temp[temp_pos] = m_pokedex[left];
-      left++;
-      temp_pos++;
+    break;
+  case 3:
+    while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseAtk() >= m_pokedex[mid] -> getBaseAtk()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
     }
-    while (mid <= right) {
-      temp[temp_pos] = m_pokedex[mid];
-      mid++;
-      temp_pos++;
-    }
+  }
+  
+  while (left <= left_end) {
+    temp[temp_pos] = m_pokedex[left];
+    left++;
+    temp_pos++;
+  }
+  while (mid <= right) {
+    temp[temp_pos] = m_pokedex[mid];
+    mid++;
+    temp_pos++;
   }
   for (int i = 0; i < num_elements; i++) {
     m_pokedex[right] = temp[right];

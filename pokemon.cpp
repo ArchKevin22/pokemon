@@ -85,8 +85,6 @@ unsigned pokemon::getSplDef() { return m_splDef; }
 unsigned pokemon::getSpeed() { return m_speed; }
 unsigned pokemon::getStatus() { return m_status; }
 
-
-
 void pokemon::printMoves() {
   cout << moveList[0]->getName() << " PP: " << moveList[0]->getPP() << '/' << moveList[0]->getMaxPP() << endl;
   cout << moveList[1]->getName() << " PP: " << moveList[1]->getPP() << '/' << moveList[1]->getMaxPP() << endl;
@@ -105,25 +103,43 @@ bool pokemon::changeStatus(unsigned s) {
 
 //returns new HP
 bool pokemon::takeDamage(unsigned dmg) {
-  bool alive = 1;
+  bool alive = true;
   int newHP = m_hp - dmg;
-  if (newHP < 0)
-    newHP = 0;
+  newHP &= -(newHP <= m_hp);
    if (newHP <= 0) {
     changeStatus(FAINTED);
-    alive = 0;
+    alive = false;
   }
    m_hp = (unsigned)newHP;
   return alive;
 }
 
-bool pokemon::lowerAtk(unsigned i) {
-  unsigned minimum = m_baseAtk - 6;
-  if (getAtk() <= minimum) {
-    return 0;
-  }
-  m_atk -= i;
-  return 1;
+bool pokemon::changeAtkStage(int i) {
+  if (m_atkStage + i > 6 || m_atkStage + i < -6)
+    return false;
+  m_atkStage + i;
+  return true;
+}
+
+bool pokemon::changeDefStage(int i) {
+  if (m_defStage + i > 6 || m_defStage + i < -6)
+    return false;
+  m_defStage + i;
+  return true;
+}
+
+bool pokemon::changeSplAtkStage(int i) {
+  if (m_splAtkStage + i > 6 || m_splAtkStage + i < -6)
+    return false;
+  m_splAtkStage + i;
+  return true;
+}
+
+bool pokemon::changeSplDefStage(int i) {
+  if (m_splDefStage + i > 6 || m_splDefStage + i < -6)
+    return false;
+  m_splDefStage + i;
+  return true;
 }
 
 void pokemon::heal_hp(unsigned h) {

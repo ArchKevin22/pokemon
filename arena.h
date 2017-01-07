@@ -9,6 +9,7 @@
 class arena {
  public:
   arena();
+  void intro();
   void play();
   void generatePokemon();
   void takeTurn();

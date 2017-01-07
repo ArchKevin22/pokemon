@@ -10,9 +10,26 @@
 #include <iostream>
 using namespace std;
 
-swift::swift() : attack("swift", 60, 20, "normal") {}
+absorb::absorb() : attack("absorb", 20, 25, "grass") {}
+acid::acid() : attack("acid", 0, 30, "poison") {}
+acid_armor::acid_armor() : attack("acid armor", 0, 20, "poison") {}
+agility::agility() : attack("agility", 0, 30, "psychic") {}
+amnesia::amnesia() : attack("amnesia", 0, 20, "psychic") {}
+aurora_beam::aurora_beam() : attack("aurora beam", 65, 20, "ice") {}
+barrage::barrage() : attack("barrage", 15, 20, "normal") {}
+barrier::barrier() : attack("barrier", 0, 20, "psychic") {}
+bite::bite() : attack("bite", 60, 25, "dark") {}
+blizzard::blizzard() : attack("blizzard", 110, 5, "ice") {}
+body_slam::body_slam() : attack("body slam", 85, 15, "normal") {}
+bone_club::bone_club() : attack("bone club", 65, 20, "ground") {}
+bonemerang::bonemerang() : attack("bonemerang", 50, 10, "ground") {}
+bubble::bubble() : attack("bubble", 40, 30, "water") {}
+bubblebeam::bubblebeam() : attack("bubblebeam", 65, 20, "water") {}
 
+dragon_rage::dragon_rage() : attack("dragon rage", 0, 10, "dragon") {}
 splash::splash() : attack("splash", 0, 40, "normal") {}
+struggle::struggle() : attack("struggle", 50, 1, "normal") {}
+swift::swift() : attack("swift", 60, 20, "normal") {}
 
 bool splash::useMove(pokemon* self, pokemon* o) {
   if (usePP()) {
@@ -23,7 +40,9 @@ bool splash::useMove(pokemon* self, pokemon* o) {
   return false;
 }
 
-dragon_rage::dragon_rage() : attack("dragon rage", 0, 10, "dragon") {}
+bool swift::useMove(pokemon* self, pokemon* o) {
+  return usePhysicalMove(self, o);
+}
 
 bool dragon_rage::useMove(pokemon* self, pokemon* o) {
   if (usePP()) {
@@ -33,8 +52,6 @@ bool dragon_rage::useMove(pokemon* self, pokemon* o) {
   return false;
 }
 
-struggle::struggle() : attack("struggle", 50, 1, "normal") {}
-
 bool struggle::usePP() { return 1; }
 
 //struggle is a "typeless move", meaning it unaffected by type nor does it have STAB
@@ -42,8 +59,8 @@ bool struggle::usePP() { return 1; }
 bool struggle::useMove(pokemon* self, pokemon* o) {
   srand(time(NULL));
   double modifier = ((((double)(rand() % 16)) / 100) + 0.85);
-  unsigned damage = ((((double)(o->getLevel() << 1) + 10) / 250) *
-		     ((double)o->getAtk() / (double)o->getDef()) * (double)getPower() + 2) * modifier;
+  unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+		     ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
   unsigned recoil = damage / 4;
   o->takeDamage(damage);
   self->takeDamage(recoil);
@@ -96,17 +113,40 @@ bool attack::add_maxpp() {
   return 0;
 }
 
-bool attack::useMove(pokemon* self, pokemon* o)  {
+bool attack::usePhysicalMove(pokemon* self, pokemon* o)  {
   if (usePP()) {
     double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
       getType().effectiveness(o->getBaseStats().getType2().getName());
     double stab = 1;
-    if (o->getBaseStats().getType1() == m_type || o->getBaseStats().getType2() == m_type)
+    if (self->getBaseStats().getType1() == m_type || self->getBaseStats().getType2() == m_type)
       stab += 0.5;
     srand(time(NULL));
     double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(o->getLevel() << 1) + 10) / 250) *
-		       ((double)o->getAtk() / (double)o->getDef()) * (double)m_power + 2) * modifier;
+    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+		       ((double)self->getAtk() / (double)self->getDef()) * (double)m_power + 2) * modifier;
+    o->takeDamage(damage);
+    if (type == 0) {
+      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool attack::useSpecialMove(pokemon* self, pokemon* o)  {
+  if (usePP()) {
+    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+      getType().effectiveness(o->getBaseStats().getType2().getName());
+    double stab = 1;
+    if (self->getBaseStats().getType1() == m_type || self->getBaseStats().getType2() == m_type)
+      stab += 0.5;
+    srand(time(NULL));
+    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+		       ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)m_power + 2) * modifier;
     o->takeDamage(damage);
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
