@@ -56,6 +56,8 @@ class pokemon {
   bool changeSpeedStage(int i);
   bool changeAccStage(int i);
   bool changeEvasionStage(int i);
+  void calcStats();
+  //void checkStatus();
   void heal_hp(unsigned h);
   void heal_all();
   ~pokemon();
@@ -68,6 +70,11 @@ private:
   unsigned max_hp;
   unsigned m_level;
   unsigned m_exp;
+  unsigned m_baseAtk;
+  unsigned m_baseDef;
+  unsigned m_baseSplAtk;
+  unsigned m_baseSplDef;
+  unsigned m_baseSpeed;
   unsigned m_atk;
   int m_atkStage;
   unsigned m_def;

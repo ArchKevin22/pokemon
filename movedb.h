@@ -37,75 +37,45 @@ class attack {
 
 struct struggle : public attack {
   struggle();
+  virtual bool useMove(pokemon* self, pokemon* o);
   virtual bool usePP();
 };
 
-struct swift : public attack {
-  swift();
-};
-
-struct splash : public attack {
-  splash();
-};
-
-struct dragon_rage : public attack {
-  dragon_rage();
-};
-
-struct absorb : public attack {
-  absorb();
-};
-
-struct acid : public attack {
-  acid();
-};
-
-struct acid_armor : public attack {
-  acid_armor();
-};
-
-struct agility : public attack {
-  agility();
-};
-
-struct amnesia : public attack {
-  amnesia();
-};
-
-struct aurora_beam : public attack {
-  aurora_beam();
-};
-
-struct barrage : public attack {
-  barrage();
-};
-
-struct barrier : public attack {
-  barrier();
-};
-
-struct blizzard : public attack {
-  blizzard();
-};
-
-struct body_slam : public attack {
-  body_slam();
-};
-
-struct bone_club : public attack {
-  bone_club();
-};
-
-struct bonemerang : public attack {
-  bonemerang();
-};
-
-struct bubble : public attack {
-  bubble();
-};
-
-struct bubblebeam : public attack {
-  bubblebeam();
-};
+struct swift : public attack { swift();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct splash : public attack { splash();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct dragon_rage : public attack { dragon_rage();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct absorb : public attack { absorb();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct acid : public attack { acid();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct acid_armor : public attack { acid_armor();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct agility : public attack { agility();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct amnesia : public attack { amnesia();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct aurora_beam : public attack { aurora_beam();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct barrage : public attack { barrage();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct barrier : public attack { barrier();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct bite : public attack { bite();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct blizzard : public attack { blizzard();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct body_slam : public attack { body_slam();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct bone_club : public attack { bone_club();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct bonemerang : public attack { bonemerang();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct bubble : public attack { bubble();
+  virtual bool useMove(pokemon* self, pokemon* o); };
+struct bubblebeam : public attack { bubblebeam();
+  virtual bool useMove(pokemon* self, pokemon* o); };
 
 #endif

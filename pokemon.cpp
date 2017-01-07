@@ -101,6 +101,39 @@ bool pokemon::changeStatus(unsigned s) {
   return 0;
 }
 
+void pokemon::calcStats() {
+  double atkmod = 100 + (abs(m_atkStage) * 50);
+  double defmod = 100 + (abs(m_defStage) * 50);
+  double splAtkmod = 100 + (abs(m_splAtkStage) * 50);
+  double splDefmod = 100 + (abs(m_splDefStage) * 50);
+  double speedmod = 100 + (abs(m_speedStage) * 50);
+  if (m_atkStage < 0)
+    atkmod = 100 / atkmod;
+  else
+    atkmod /= 100;
+  if (m_defStage < 0)
+    defmod = 100 / defmod;
+  else
+    defmod /= 100;
+  if (m_splAtkStage < 0)
+    splAtkmod = 100 / splAtkmod;
+  else
+    splAtkmod /= 100;
+  if (m_splDefStage < 0)
+    splDefmod = 100 / splDefmod;
+  else
+    splDefmod /= 100;
+  if (m_speedStage < 0)
+    speedmod = 100 / speedmod;
+  else
+    speedmod /= 100;
+  m_atk = m_baseAtk * atkmod;
+  m_def = m_baseDef * defmod;
+  m_splAtk = m_baseSplAtk * splAtkmod;
+  m_splDef = m_baseSplDef * splDefmod;
+  m_speed = m_baseSpeed * speedmod;
+}
+
 //returns new HP
 bool pokemon::takeDamage(unsigned dmg) {
   bool alive = true;
@@ -139,6 +172,13 @@ bool pokemon::changeSplDefStage(int i) {
   if (m_splDefStage + i > 6 || m_splDefStage + i < -6)
     return false;
   m_splDefStage + i;
+  return true;
+}
+
+bool pokemon::changeSpeedStage(int i) {
+  if (m_speedStage + i > 6 || m_speedStage + i < -6)
+    return false;
+  m_speedStage + i;
   return true;
 }
 

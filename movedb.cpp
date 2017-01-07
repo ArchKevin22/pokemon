@@ -11,7 +11,7 @@
 using namespace std;
 
 absorb::absorb() : attack("absorb", 20, 25, "grass") {}
-acid::acid() : attack("acid", 0, 30, "poison") {}
+acid::acid() : attack("acid", 40, 30, "poison") {}
 acid_armor::acid_armor() : attack("acid armor", 0, 20, "poison") {}
 agility::agility() : attack("agility", 0, 30, "psychic") {}
 amnesia::amnesia() : attack("amnesia", 0, 20, "psychic") {}
@@ -30,6 +30,217 @@ dragon_rage::dragon_rage() : attack("dragon rage", 0, 10, "dragon") {}
 splash::splash() : attack("splash", 0, 40, "normal") {}
 struggle::struggle() : attack("struggle", 50, 1, "normal") {}
 swift::swift() : attack("swift", 60, 20, "normal") {}
+
+bool barrage::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    srand(time(NULL));
+    int a = rand() % 1000 + 1;
+    int c;
+    if (a <= 375)
+      c = 2;
+    else if (a <= 750)
+      c = 3;
+    else if (a <= 875)
+      c = 4;
+    else
+      c = 5;
+    for (int i = 0; i < c; i++) {
+      double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+	getType().effectiveness(o->getBaseStats().getType2().getName());
+      double stab = 1;
+      if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
+	stab += 0.5;
+      srand(time(NULL));
+      double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+      unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+			 ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
+      o->takeDamage(damage);
+      if (type == 0) {
+	cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+      }
+    }
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool barrier::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    self->changeDefStage(2);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool blizzard::useMove(pokemon* self, pokemon* o) {
+  if (useSpecialMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a == 1)
+      o->changeStatus(4);
+    return true;
+  }
+  return false;
+}
+
+bool bone_club::useMove(pokemon* self, pokemon* o) {
+  if (usePhysicalMove(self, o)) {
+    //TODO: implement flinch
+    return true;
+  }
+  return false;
+}
+
+bool bonemerang::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+      getType().effectiveness(o->getBaseStats().getType2().getName());
+    double stab = 1;
+    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
+      stab += 0.5;
+    srand(time(NULL));
+    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+		       ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
+    o->takeDamage(damage);
+    o->takeDamage(damage);
+    if (type == 0) {
+      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool bubble::useMove(pokemon* self, pokemon* o) {
+  if (useSpecialMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a == 1)
+      o->changeSpeedStage(-1);
+    return true;
+  }
+  return false;
+}
+
+bool bubblebeam::useMove(pokemon* self, pokemon* o) {
+  if (useSpecialMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a == 1)
+      o->changeSpeedStage(-1);
+    return true;
+  }
+  return false;
+}
+
+bool body_slam::useMove(pokemon* self, pokemon* o) {
+  if (usePhysicalMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a <= 3)
+      o->changeStatus(5);
+    return true;
+  }
+  return false;
+}
+
+bool bite::useMove(pokemon* self, pokemon* o) {
+  if (usePhysicalMove(self, o)) {
+    //TODO: implement flinch
+    return true;
+  }
+  return false;
+}
+
+bool aurora_beam::useMove(pokemon* self, pokemon* o) {
+  if (useSpecialMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a == 1)
+      o->changeAtkStage(-1);
+    return true;
+  }
+  return false;
+}
+ 
+bool amnesia::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    self->changeSplDefStage(2);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool agility::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    self->changeSpeedStage(2);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool acid_armor::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    self->changeDefStage(2);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool acid::useMove(pokemon* self, pokemon* o) {
+  if (useSpecialMove(self, o)) {
+    srand(time(NULL));
+    int a = rand() % 10 + 1;
+    if (a == 1)
+      o->changeDefStage(-1);
+    return true;
+  }
+  return false;
+}
+
+bool absorb::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+      getType().effectiveness(o->getBaseStats().getType2().getName());
+    double stab = 1;
+    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
+      stab += 0.5;
+    srand(time(NULL));
+    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+		       ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)getPower() + 2) * modifier;
+    unsigned healAmt = ceil(damage / 2);
+    o->takeDamage(damage);
+    self->heal_hp(healAmt);
+    if (type == 0) {
+      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
 
 bool splash::useMove(pokemon* self, pokemon* o) {
   if (usePP()) {
