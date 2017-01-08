@@ -1,5 +1,7 @@
 Welcome to REALLY BAD POKEMON, where all the pokemon will have
 moves that they probably can't learn at all in the original games.
+You can currently battle the computer with a randomly generated pokemon or view the pokedex.
+
 
 TODO (just in case I left anything out in the individual files):
 Implement accuracy and evasion
