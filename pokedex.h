@@ -4,10 +4,6 @@
 #include "pokedb.h"
 class pokeStat;
 
-static int NUM = 1;
-static int TYPE = 2;
-static int NAME = 3;
-
 class pokedex {
  public:
   pokedex();

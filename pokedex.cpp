@@ -187,10 +187,11 @@ void pokedex::viewer() {
       exit(0);
     }
     else if (a == 0) {
-      cout << "How would you like to sort it? Input 1 for name, 2 for national pokedex number, "
-	   << "and 3 for base attack stat (in descending order)." << endl;
+      cout << "How would you like to sort it? Input 1 for name, 2 for national pokedex number, \n"
+	   << "and 3 for base HP, 4 for base attack, 5 for base defense, 6 for base special attack, \n"
+	   << "7 for base special defense, 8 for base speed"<< endl;
       cin >> b;
-      while (b > 3 || b < 1) {
+      while (b > 8 || b < 1) {
 	cin.clear();
 	cout << "Invalid input. Please try again." << endl;
 	cin >> b;
@@ -221,7 +222,7 @@ void pokedex::showEntry(int i) {
        << "Base stats:" << endl;
   cout << "HP: "<< m_pokedex[i-1] -> getBaseHP() << '\n' << 
     "Attack: " << m_pokedex[i-1] -> getBaseAtk() << '\n' <<
-    "Defense: " << m_pokedex[i-1] -> getBaseAtk() << '\n' <<
+    "Defense: " << m_pokedex[i-1] -> getBaseDef() << '\n' <<
     "Special Attack: " << m_pokedex[i-1] -> getBaseSplAtk() << '\n' <<
     "Special Defense: " << m_pokedex[i-1] -> getBaseSplDef() << '\n' <<
     "Speed: " << m_pokedex[i-1] -> getBaseSpeed() << endl;
@@ -265,7 +266,77 @@ void pokedex::merge(int type, int left, int mid, int right) {
     break;
   case 3:
     while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseHP() >= m_pokedex[mid] -> getBaseHP()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
+    }
+    break;
+  case 4:
+    while (left <= left_end && mid <= right) {
       if (m_pokedex[left] -> getBaseAtk() >= m_pokedex[mid] -> getBaseAtk()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
+    }
+    break;
+  case 5:
+    while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseDef() >= m_pokedex[mid] -> getBaseDef()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
+    }
+    break;
+  case 6:
+    while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseSplAtk() >= m_pokedex[mid] -> getBaseSplAtk()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
+    }
+    break;
+  case 7:
+    while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseSplDef() >= m_pokedex[mid] -> getBaseSplDef()) {
+	temp[temp_pos] = m_pokedex[left];
+	temp_pos++;
+	left++;
+      }
+      else {
+	temp[temp_pos] = m_pokedex[mid];
+	temp_pos++;
+	mid++;
+      }
+    }
+    break;
+  case 8:
+    while (left <= left_end && mid <= right) {
+      if (m_pokedex[left] -> getBaseSpeed() >= m_pokedex[mid] -> getBaseSpeed()) {
 	temp[temp_pos] = m_pokedex[left];
 	temp_pos++;
 	left++;
@@ -304,6 +375,8 @@ void pokedex::sort(int type, int start, int end) {
 }
 
 pokedex::~pokedex() {
-  for(int i = 0; i < size; i++)
+  for (int i = 0; i < size; i++) {
     delete m_pokedex[i];
+    delete temp[i];
+  }
 }

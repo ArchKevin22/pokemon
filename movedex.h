@@ -14,12 +14,14 @@ struct movedex {
 public:
   movedex();
   void print();
-  attack getEntryAt(int i);
-  void printEntryAt(int i);
+  attack* getEntryAt(int i);
+  void showEntry(int i);
+  void viewer();
   void sortBy(int i);
-  void sort(/*insert variables here*/);
-  void merge(/*insert variables here*/);
+  void sort(int type, int start, int end);
+  void merge(int type, int start, int mid, int end);
 private:
+  int size;
   vector<attack*> movePool;
 };
 
