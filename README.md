@@ -1,7 +1,12 @@
-Welcome to REALLY BAD POKEMON, where all the pokemon will have
-moves that they probably can't learn at all in the original games.
+Welcome to Pokemon Labs.
+In the region of Kanto, Professor Oak has discovered a method to make any pokemon learn any move!
+This groundbreaking discovery has lead to Pokemon learning moves they couldn't dream of learning.
+Has science gone too far? Let's find out.
+
+
 You can currently battle the computer with a randomly generated pokemon or view the pokedex.
 
+There currently exists a pool of 30 moves for the pokemon to learn from.
 
 TODO (just in case I left anything out in the individual files):
 Implement accuracy and evasion
@@ -43,9 +48,17 @@ Reflect (needs extra variable and counter)
 Rest (needs counter)
 Roar (needs more than 1 pokemon for this to work)
 Sand Attack (needs accuracy stat)
-
-
+Smokescreen (accuracy stat)
+Substitute (needs a way to represent the substitute)
+Supersonic (confusion)
+Teleport (will not implement unless I implement battles with wild pokemon)
+Toxic (need to implement badly poisoned, unique move)
+Transform (yay copy constructors)
+Whirlwind (needs multi-pokemon battle)
+Wrap (trapping pokemon)
 
 Implement items
 Implement 6-pokemon battles
 Implement battle menu system (for switching pokemon, using items, etc)
+
+Temp may or may not have a memory leak, looking into that.

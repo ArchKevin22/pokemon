@@ -5,15 +5,19 @@
 
 #include "movedb.h"
 #include <vector>
+
 using namespace std;
 
 #ifndef MOVEDEX_H
 #define MOVEDEX_H
 
+class attack;
 struct movedex {
 public:
   movedex();
+  ~movedex();
   void print();
+  int getSize();
   attack* getEntryAt(int i);
   void showEntry(int i);
   void viewer();
@@ -22,7 +26,7 @@ public:
   void merge(int type, int start, int mid, int end);
 private:
   int size;
-  vector<attack*> movePool;
+  attack* movePool[30];
 };
 
 #endif

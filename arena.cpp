@@ -91,5 +91,7 @@ void arena::generatePokemon() {
   }
   player = new pokemon(*trainer, iv1, level1);
   opponent = new pokemon(*cpu, iv2, level2);
+  player->makeMoveset();
+  opponent->makeMoveset();
 }
 

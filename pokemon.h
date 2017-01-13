@@ -9,6 +9,7 @@
 #include <iomanip>
 #include "pokedb.h"
 #include "typedb.h"
+#include "movedex.h"
 #include "movedb.h"
 using namespace std;
 
@@ -32,11 +33,11 @@ class pokemon {
  public:
   pokemon(pokeStat base, unsigned iv[], unsigned level);
   void makeMoveset();
+  attack* getMove(int i);
   void printMoves();
   void setNickName(string s);
   string getNickName();
   string getName();
-  attack* getMove(int i);
   pokeStat getBaseStats();
   unsigned getHP();
   unsigned getLevel();
@@ -57,14 +58,16 @@ class pokemon {
   bool changeAccStage(int i);
   bool changeEvasionStage(int i);
   void calcStats();
-  //void checkStatus();
+  //void checkStatusBeforeTurn();
+  //void checkStatusAfterTurn();
   void heal_hp(unsigned h);
   void heal_all();
   ~pokemon();
   
 private:
+  movedex h;
   pokeStat m_pokestat;
-  vector<attack*> moveList;
+  attack* moveList[4];
   string m_nickname;
   unsigned m_hp;
   unsigned max_hp;

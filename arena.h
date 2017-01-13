@@ -5,6 +5,7 @@
 
 #include "pokedex.h"
 #include "pokemon.h"
+#include "movedex.h"
 
 class arena {
  public:
@@ -16,6 +17,8 @@ class arena {
   ~arena();
  private:
   pokedex p;
+  movedex h1;
+  movedex h2;
   pokeStat* trainer;
   pokeStat* cpu;
   pokemon* player;

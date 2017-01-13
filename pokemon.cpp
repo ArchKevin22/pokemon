@@ -46,22 +46,18 @@ pokemon::pokemon(pokeStat base, unsigned iv[],
   m_status = 0;
   accuracy = 100;
   evasion = 100;
-  makeMoveset();
 }
 
 void pokemon::makeMoveset() {
-  /* TODO: generate different moves for each pokemon
-   * vector<attack> moves = getBaseStats().getMovePool();
-   * If there are less than 4 learnable moves, make the remaining ints
-   * 0, where 0 is the null move. */
-  //int move1 = random int
-  //int move2 = random int
-  //int move3 = random int
-  //int move4 = random int
-  moveList.push_back(new struggle());
-  moveList.push_back(new swift());
-  moveList.push_back(new splash());
-  moveList.push_back(new dragon_rage());
+  int a = h.getSize();
+  int move1 = rand() % a + 1;
+  int move2 = rand() % a + 1;
+  int move3 = rand() % a + 1;
+  int move4 = rand() % a + 1;
+  moveList[0] = h.getEntryAt(move1);
+  moveList[1] = h.getEntryAt(move2);
+  moveList[2] = h.getEntryAt(move3);
+  moveList[3] = h.getEntryAt(move4);
 }
 
 attack* pokemon::getMove(int i) {
@@ -196,12 +192,10 @@ void pokemon::heal_hp(unsigned h) {
 void pokemon::heal_all() {
   m_status = NONE;
   heal_hp(MAX_HP_POSSIBLE);
-  for (int i = 0; i < moveList.size(); i++)
+  for (int i = 0; i < 4; i++)
     moveList[i]->heal_pp(MAX_PP_POSSIBLE);
 }
 
 pokemon::~pokemon() {
-  for (int i = 0; i < 4; i++)
-    delete moveList[i];
   cout << m_nickname << " has been released to the wild." << endl;
 }

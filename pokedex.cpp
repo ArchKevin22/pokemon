@@ -377,6 +377,5 @@ void pokedex::sort(int type, int start, int end) {
 pokedex::~pokedex() {
   for (int i = 0; i < size; i++) {
     delete m_pokedex[i];
-    delete temp[i];
   }
 }
