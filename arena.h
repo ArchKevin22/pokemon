@@ -17,8 +17,7 @@ class arena {
   ~arena();
  private:
   pokedex p;
-  movedex h1;
-  movedex h2;
+  movedex h;
   pokeStat* trainer;
   pokeStat* cpu;
   pokemon* player;

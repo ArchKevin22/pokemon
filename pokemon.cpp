@@ -52,8 +52,14 @@ void pokemon::makeMoveset() {
   int a = h.getSize();
   int move1 = rand() % a + 1;
   int move2 = rand() % a + 1;
+  while(move2 == move1)
+    move2 = rand() % a + 1;
   int move3 = rand() % a + 1;
+  while(move3 == move2 && move3 == move1)
+    move3 = rand() % a + 1;
   int move4 = rand() % a + 1;
+  while(move4 == move3 && move4 == move2 && move4 == move1)
+    move4 = rand() % a + 1;
   moveList[0] = h.getEntryAt(move1);
   moveList[1] = h.getEntryAt(move2);
   moveList[2] = h.getEntryAt(move3);
@@ -82,10 +88,11 @@ unsigned pokemon::getSpeed() { return m_speed; }
 unsigned pokemon::getStatus() { return m_status; }
 
 void pokemon::printMoves() {
-  cout << moveList[0]->getName() << " PP: " << moveList[0]->getPP() << '/' << moveList[0]->getMaxPP() << endl;
-  cout << moveList[1]->getName() << " PP: " << moveList[1]->getPP() << '/' << moveList[1]->getMaxPP() << endl;
-  cout << moveList[2]->getName() << " PP: " << moveList[2]->getPP() << '/' << moveList[2]->getMaxPP() << endl;
-  cout << moveList[3]->getName() << " PP: " << moveList[3]->getPP() << '/' << moveList[3]->getMaxPP() << endl;
+  cout << "Movelist:" << endl;
+  cout << "1. " << moveList[0]->getName() << " PP: " << moveList[0]->getPP() << '/' << moveList[0]->getMaxPP() << endl;
+  cout << "2. " << moveList[1]->getName() << " PP: " << moveList[1]->getPP() << '/' << moveList[1]->getMaxPP() << endl;
+  cout << "3. " << moveList[2]->getName() << " PP: " << moveList[2]->getPP() << '/' << moveList[2]->getMaxPP() << endl;
+  cout << "4. " << moveList[3]->getName() << " PP: " << moveList[3]->getPP() << '/' << moveList[3]->getMaxPP() << endl;
 }
 
 //changes status

@@ -35,7 +35,8 @@ void arena::play() {
   generatePokemon();
   cout << player->getNickName() << " level " << player->getLevel()
        << " vs. " << opponent->getNickName() << " level " << opponent->getLevel() << endl;
-  cout << "------------------------" << endl;
+  cout << "You are " << player->getNickName() << '\n' << endl;
+  cout << "---------------------------" << endl;
   while(player->getHP() > 0 && opponent->getHP() > 0) {
     cout << player->getNickName() << " HP: " << player->getHP() << endl;
     cout << opponent->getNickName() << " HP: " << opponent->getHP() << endl;
@@ -53,23 +54,31 @@ void arena::play() {
     if (player->getSpeed() >= opponent->getSpeed()) {
       cout << player->getNickName() << " used " << player->getMove(a)->getName() << "!" << endl;
       player->getMove(a)->useMove(player, opponent);
-      cout << opponent->getNickName() << " used " << opponent->getMove(b)->getName() << "!" << endl;
-      opponent->getMove(b)->useMove(opponent, player);
+      if (opponent->getHP() > 0) {
+	cout << opponent->getNickName() << " used " << opponent->getMove(b)->getName() << "!" << endl;
+	opponent->getMove(b)->useMove(opponent, player);
+      }
     }
     else {
       cout << opponent->getNickName() << " used " << opponent->getMove(b)->getName() << "!" << endl;
       opponent->getMove(b)->useMove(opponent, player);
-      cout << player->getNickName() << " used " << player->getMove(a)->getName() << "!" << endl;
-      player->getMove(a)->useMove(player, opponent);
+      if (player->getHP() > 0) {
+	cout << player->getNickName() << " used " << player->getMove(a)->getName() << "!" << endl;
+	player->getMove(a)->useMove(player, opponent);
+      }
     }
     cout << "---------------------------" << endl;
   }
-  if (player->getHP() == 0)
-    cout << "The opponent won!" << endl;
-  else if (opponent->getHP() == 0)
-    cout << "You won!" << endl;
+  cout << player->getNickName() << " HP: " << player->getHP() << endl;
+  cout << opponent->getNickName() << " HP: " << opponent->getHP() << endl;
+  cout << "---------------------------" << endl;
+  if (player->getHP() == 0) 
+    if (opponent->getHP() == 0) 
+      cout << "It ended in a draw!" << endl;
+    else
+      cout << "The opponent won!" << endl;
   else
-    cout << "Draw." << endl;
+    cout << "You won!" << endl;
 }
 
 

@@ -252,6 +252,12 @@ bool double_edge::useMove(pokemon* self, pokemon* o) {
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
     }
+    else if (type == 2) {
+      cout << "It's super effective!" << endl;
+    }
+    else if (type == 0.5) {
+      cout << "It's not very effective..." << endl;
+    }
     return true;
   }
   else {
@@ -286,6 +292,12 @@ bool barrage::useMove(pokemon* self, pokemon* o) {
       o->takeDamage(damage);
       if (type == 0) {
 	cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+      }
+      else if (type == 2) {
+	cout << "It's super effective!" << endl;
+      }
+      else if (type == 0.5) {
+	cout << "It's not very effective..." << endl;
       }
     }
     return true;
@@ -341,6 +353,12 @@ bool bonemerang::useMove(pokemon* self, pokemon* o) {
     o->takeDamage(damage);
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
+    else if (type == 2) {
+      cout << "It's super effective!" << endl;
+    }
+    else if (type == 0.5) {
+      cout << "It's not very effective..." << endl;
     }
     return true;
   }
@@ -463,6 +481,12 @@ bool absorb::useMove(pokemon* self, pokemon* o) {
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
     }
+    else if (type == 2) {
+      cout << "It's super effective!" << endl;
+    }
+    else if (type == 0.5) {
+      cout << "It's not very effective..." << endl;
+    }
     return true;
   }
   else {
@@ -568,6 +592,12 @@ bool attack::usePhysicalMove(pokemon* self, pokemon* o)  {
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
     }
+    else if (type == 2) {
+      cout << "It's super effective!" << endl;
+    }
+    else if (type == 0.5) {
+      cout << "It's not very effective..." << endl;
+    }
     return true;
   }
   else {
@@ -590,6 +620,12 @@ bool attack::useSpecialMove(pokemon* self, pokemon* o)  {
     o->takeDamage(damage);
     if (type == 0) {
       cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+    }
+    else if (type == 2) {
+      cout << "It's super effective!" << endl;
+    }
+    else if (type == 0.5) {
+      cout << "It's not very effective..." << endl;
     }
     return true;
   }
