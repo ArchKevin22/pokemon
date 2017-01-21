@@ -55,10 +55,10 @@ void pokemon::makeMoveset() {
   while(move2 == move1)
     move2 = rand() % a + 1;
   int move3 = rand() % a + 1;
-  while(move3 == move2 && move3 == move1)
+  while(move3 == move2 || move3 == move1)
     move3 = rand() % a + 1;
   int move4 = rand() % a + 1;
-  while(move4 == move3 && move4 == move2 && move4 == move1)
+  while(move4 == move3 || move4 == move2 || move4 == move1)
     move4 = rand() % a + 1;
   moveList[0] = h.getEntryAt(move1);
   moveList[1] = h.getEntryAt(move2);

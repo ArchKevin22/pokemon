@@ -1,6 +1,8 @@
 #include "arena.h"
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
+#include <random>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -21,6 +23,7 @@ void arena::intro() {
   }
   switch(a) {
   case 1:
+    showTutorial();
     play();
     break;
   case 2:
@@ -29,6 +32,13 @@ void arena::intro() {
 }
 
 arena::~arena() {
+}
+
+void arena::showTutorial() {
+  cout << "The player (you) will battle 1v1 against the computer. \n"
+       << "Your objective is to defeat the other player's Pokemon. \n"
+       << "To use a move, type 1-4 to use the corresponding move. \n"
+       << "Once a Pokemon's HP goes to zero, the game is over." << endl;
 }
 
 void arena::play() {
@@ -86,14 +96,17 @@ void arena::play() {
 void arena::generatePokemon() {
   int a[2];
   srand(time(NULL));
+  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
   a[0] = rand() % 151 + 1;
   a[1] = rand() % 151 + 1;
   trainer = p.getEntryAt(a[0]);
   cpu = p.getEntryAt(a[1]);
+  default_random_engine generator(seed);
+  normal_distribution<double> distribution(50, 5);
   unsigned iv1[4];
   unsigned iv2[4];
-  unsigned level1 = rand() % 100 + 1;
-  unsigned level2 = rand() % 100 + 1;
+  unsigned level1 = distribution(generator);
+  unsigned level2 = distribution(generator);
   for (int i = 0; i < 4; i++) {
     iv1[i] = rand() % 16 + 1;
     iv2[i] = rand() % 16 + 1;

@@ -12,6 +12,7 @@ class arena {
   arena();
   void intro();
   void play();
+  void showTutorial();
   void generatePokemon();
   void takeTurn();
   ~arena();
