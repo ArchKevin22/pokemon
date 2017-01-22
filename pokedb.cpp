@@ -39,10 +39,10 @@ pikachu::pikachu() : pokeStat(25, "pikachu", 35, 55, 30, 50, 40, 90, "electric",
 raichu::raichu() : pokeStat(26, "raichu", 60, 90, 55, 90, 80, 100, "electric", "NULL") {}
 sandshrew::sandshrew() : pokeStat(27, "sandshrew", 50, 75, 85, 20, 30, 40, "ground", "NULL") {}
 sandslash::sandslash() : pokeStat(28, "sandslash", 75, 100, 110, 45, 55, 65, "ground", "NULL") {}
-nidoranF::nidoranF() : pokeStat(29, "nidoran\xC", 55, 47, 52, 40, 40, 41, "poison", "NULL") {}
+nidoranF::nidoranF() : pokeStat(29, "nidoranF", 55, 47, 52, 40, 40, 41, "poison", "NULL") {}
 nidorina::nidorina() : pokeStat(30, "nidorina", 70, 62, 67, 55, 55, 56, "poison", "NULL") {}
 nidoqueen::nidoqueen() : pokeStat(31, "nidoqueen", 90, 82, 87, 75, 85, 76, "poison", "ground") {}
-nidoranM::nidoranM() : pokeStat(32, "nidoran\xB", 46, 57, 40, 40, 40, 50, "poison", "NULL") {}
+nidoranM::nidoranM() : pokeStat(32, "nidoranM", 46, 57, 40, 40, 40, 50, "poison", "NULL") {}
 nidorino::nidorino() : pokeStat(33, "nidorino", 61, 72, 57, 55, 55, 65, "poison", "NULL") {}
 nidoking::nidoking() : pokeStat(34, "nidoking", 81, 92, 7, 85, 75, 85, "poison", "ground") {}
 clefairy::clefairy() : pokeStat(35, "clefairy", 70, 45, 48, 60, 65, 35, "normal", "NULL") {}
