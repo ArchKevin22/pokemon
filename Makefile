@@ -10,5 +10,4 @@ debug:
 clean:
 	rm driver debug pokemon.tar.gz
 dist:
-	tar cf pokemon.tar *.h *.c Makefile README.md
-	gzip pokemon.tar
+	tar zcf pokemon.tgz *.h *.c Makefile README.md
