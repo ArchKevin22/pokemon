@@ -1,10 +1,25 @@
+/* Moves Database
+ * Each move has a power, type, and PP.
+ * Max PP can be increased up to 3 times.
+ * There may be moves that affect the stats of the Pokemon.
+ *
+ */
+
 #ifndef MOVEDB_H
 #define MOVEDB_H
 
 #include "typedb.h"
 #include "pokemon.h"
+#include "utils.h"
 #include <string>
 using namespace std;
+
+enum battleStat {atk, def, sa, sd, sp};
+enum whichPokemon {me, you};
+enum upOrDown {up, down};
+enum category {physical, special};
+typedef int prob;
+
 
 class pokemon;
 
@@ -19,11 +34,20 @@ class attack {
   unsigned getPP();
   unsigned getMaxPP();
   virtual bool useMove(pokemon* self, pokemon* o) = 0;
-  virtual bool usePhysicalMove(pokemon* self, pokemon* o);  
-  virtual bool useSpecialMove(pokemon* self, pokemon* o);
+  unsigned getDamage(pokemon* self, pokemon* o, category c, double& t);
+  void printEffectiveness(double effectiveness, pokemon* o);
+  bool useChargingMove(pokemon* self, pokemon* o, category c);
+  bool useAttackMove(pokemon* self, pokemon* o, category c);
+  bool useMultipleMove(pokemon* self, pokemon* o, category c, int min, int max);
+  bool useRecoilorHealMove(pokemon* self, pokemon* o, category c, unsigned& amt, unsigned fraction);
+  bool useStatAlteringMove(pokemon* self, pokemon* o, category c, battleStat s, prob p, whichPokemon w, upOrDown u, int amt);
+  bool useStatAlteringMove(pokemon* self, pokemon* o, category c, Status s, prob p, whichPokemon w);
+  bool alterStat(pokemon* affected, battleStat s, prob p, upOrDown u, int amt);
+  bool inflictStatusEffect(pokemon* affected, Status s, prob p);
   virtual bool usePP();
   void heal_pp(unsigned n);
   bool add_maxpp();
+  int random_int_in_range(int first, int last);
 
  private:
   unsigned m_power;

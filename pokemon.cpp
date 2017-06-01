@@ -1,32 +1,6 @@
-/* Pokemon class
- * The info about all the pokemons are in the Pokemon Database (pokedb.cpp)
- * The info about all the moves are in the Moves Database (movesdb.cpp)
- * All the types can be found in the Type Database (typedb.cpp)
- * All the info about base stats and formulas for calculating things are from Bulbapedia.
- *
- * TODO:
- * Add more conditions (confused, flinched, trapped, etc)
- * Actually make the status effects do something
- * Implement leveling up
- */
-
 #include "pokemon.h"
 
-/* For an pokemon, the stats are determined by IV's. Each IV is from 0 to 15.
- * iv[0] = Attack IV
- * iv[1] = Defense IV
- * iv[2] = Special IV for both Special Attack and Special Defense
- * iv[3] = Speed IV
- * The HP IV is taken from the LSB (least significant bit) of the other 4 IV's and concatenated into
- * a number from 0 to 15.
- *
- * The base stats are determined by the objectType stats.
- * 
- * Each pokemon will have a vector of 4 moves (which may or may not be empty. The type
- * declaration of each move will have a specific power and PP (power point).
- */
-
-pokemon::pokemon(pokeStat base, unsigned iv[], 
+pokemon::pokemon(pokeStat base, unsigned iv[],
 		 unsigned level)
   : m_pokestat(base), m_nickname(m_pokestat.getName()) {
   m_level = level;
@@ -43,7 +17,7 @@ pokemon::pokemon(pokeStat base, unsigned iv[],
   unsigned hp_iv = ((iv[0] & 1) << 3) + ((iv[1] & 1) << 2) + ((iv[3] & 1) << 1) + (iv[2] & 1);
   m_hp = ((((base.getBaseHP() + hp_iv) << 1) + (sqrt(hp_iv) / 4)) * level / 100) + level + 10;
   max_hp = m_hp;
-  m_status = 0;
+  m_status = none;
   accuracy = 100;
   evasion = 100;
 }
@@ -85,7 +59,7 @@ unsigned pokemon::getDef() { return m_def; }
 unsigned pokemon::getSplAtk() { return m_splAtk; }
 unsigned pokemon::getSplDef() { return m_splDef; }
 unsigned pokemon::getSpeed() { return m_speed; }
-unsigned pokemon::getStatus() { return m_status; }
+Status pokemon::getStatus() { return m_status; }
 
 void pokemon::printMoves() {
   cout << "Movelist:" << endl;
@@ -96,12 +70,12 @@ void pokemon::printMoves() {
 }
 
 //changes status
-bool pokemon::changeStatus(unsigned s) {
+bool pokemon::changeStatus(Status s) {
   if (m_status != s) {
     m_status = s;
-    return 1;
+    return true;
   }
-  return 0;
+  return false;
 }
 
 void pokemon::calcStats() {
@@ -143,7 +117,7 @@ bool pokemon::takeDamage(unsigned dmg) {
   int newHP = m_hp - dmg;
   newHP &= -(newHP <= m_hp);
    if (newHP <= 0) {
-    changeStatus(FAINTED);
+    changeStatus(fainted);
     alive = false;
   }
    m_hp = (unsigned)newHP;
@@ -186,7 +160,7 @@ bool pokemon::changeSpeedStage(int i) {
 }
 
 void pokemon::heal_hp(unsigned h) {
-  if (m_status == FAINTED) {
+  if (m_status == fainted) {
     cout << "You can't heal a fainted pokemon!" << endl;
     return;
   }
@@ -197,7 +171,7 @@ void pokemon::heal_hp(unsigned h) {
 
 //Completely heals the pokemon.
 void pokemon::heal_all() {
-  m_status = NONE;
+  m_status = none;
   heal_hp(MAX_HP_POSSIBLE);
   for (int i = 0; i < 4; i++)
     moveList[i]->heal_pp(MAX_PP_POSSIBLE);

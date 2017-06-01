@@ -1,10 +1,3 @@
-/* Moves Database 
- * Each move has a power, type, and PP.
- * Max PP can be increased up to 3 times.
- * There may be moves that affect the stats of the Pokemon.
- *   
- */
-
 #include "movedb.h"
 #include <ctime>
 #include <iostream>
@@ -12,12 +5,12 @@ using namespace std;
 
 absorb::absorb() : attack("absorb", 20, 25, "grass") {}
 acid::acid() : attack("acid", 40, 30, "poison") {}
-//acid_armor::acid_armor() : attack("acid armor", 0, 20, "poison") {}
-//agility::agility() : attack("agility", 0, 30, "psychic") {}
-//amnesia::amnesia() : attack("amnesia", 0, 20, "psychic") {}
+acid_armor::acid_armor() : attack("acid armor", 0, 20, "poison") {}
+agility::agility() : attack("agility", 0, 30, "psychic") {}
+amnesia::amnesia() : attack("amnesia", 0, 20, "psychic") {}
 aurora_beam::aurora_beam() : attack("aurora beam", 65, 20, "ice") {}
 barrage::barrage() : attack("barrage", 15, 20, "normal") {}
-//barrier::barrier() : attack("barrier", 0, 20, "psychic") {}
+barrier::barrier() : attack("barrier", 0, 20, "psychic") {}
 bite::bite() : attack("bite", 60, 25, "dark") {}
 blizzard::blizzard() : attack("blizzard", 110, 5, "ice") {}
 body_slam::body_slam() : attack("body slam", 85, 15, "normal") {}
@@ -95,137 +88,100 @@ splash::splash() : attack("splash", 0, 40, "normal") {}
 struggle::struggle() : attack("struggle", 50, 1, "normal") {}
 swift::swift() : attack("swift", 60, 20, "normal") {}
 
-bool ice_beam::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    //implement freezing
-    return true;
-  }
-  return false;
+bool acid::useMove(pokemon* self, pokemon* o) {
+  return useStatAlteringMove(self, o, special, def, 33, you, down, -1);
 }
-bool ice_punch::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    //implement freezing
-    return true;
+
+bool acid_armor::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    return alterStat(self, def, 100, up, 2);
   }
+  cout << "There's no PP left for this move!" << endl;
   return false;
 }
 
-bool leech_life::useMove(pokemon* self, pokemon* o) {
+bool agility::useMove(pokemon* self, pokemon* o) {
   if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)getPower() + 2) * modifier;
-    unsigned healAmt = ceil(damage / 2);
-    o->takeDamage(damage);
+    return alterStat(self, sp, 100, up, 2);
+  }
+  cout << "There's no PP left for this move!" << endl;
+  return false;
+}
+
+bool ice_beam::useMove(pokemon* self, pokemon* o) {
+  return useStatAlteringMove(self, o, special, frz, 10, you);
+}
+bool ice_punch::useMove(pokemon* self, pokemon* o) {
+  return useStatAlteringMove(self, o, physical, frz, 10, you);
+}
+
+bool leech_life::useMove(pokemon* self, pokemon* o) {
+  unsigned healAmt = 0;
+  if (useRecoilorHealMove(self, o, special, healAmt, 2)) {
     self->heal_hp(healAmt);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
     return true;
   }
+
   else {
-    cout << "There's no PP left for this move!" << endl;
     return false;
   }
 }
 
 bool earthquake::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool drill_peck::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool egg_bomb::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool gust::useMove(pokemon* self, pokemon* o) {
-  return useSpecialMove(self, o);
+  return useAttackMove(self, o, special);
 }
 
 bool horn_attack::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool hydro_pump::useMove(pokemon* self, pokemon* o) {
-  return useSpecialMove(self, o);
+  return useAttackMove(self, o, special);
 }
 
 bool hyper_beam::useMove(pokemon* self, pokemon* o) {
-  return useSpecialMove(self, o);
+  return useAttackMove(self, o, special);
 }
 
 bool hyper_fang::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    //TODO: implement flinch
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, physical, fln, 10, you);
 }
 
 bool headbutt::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    //TODO: implement flinch
-    return true;
-  }
-  return false;  
+  return useStatAlteringMove(self, o, physical, fln, 10, you);
 }
 
 bool ember::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeStatus(3);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, brn, 10, you);
 }
 
 bool fire_punch::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeStatus(3);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, physical, brn, 10, you);
 }
 
 bool flamethrower::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeStatus(3);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, brn, 10, you);
 }
 
 
 bool fire_blast::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeStatus(3);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, brn, 10, you);
 }
 
 bool explosion::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
+  if (useAttackMove(self, o, physical)) {
     self->takeDamage(9999);
     return true;
   }
@@ -233,264 +189,81 @@ bool explosion::useMove(pokemon* self, pokemon* o) {
 }
 
 bool cut::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool double_edge::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
-    unsigned recoil = damage / 4;
-    o->takeDamage(damage);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
-    else if (type == 2) {
-      cout << "It's super effective!" << endl;
-    }
-    else if (type == 0.5) {
-      cout << "It's not very effective..." << endl;
-    }
+  unsigned recoil = 0;
+  if (useRecoilorHealMove(self, o, physical, recoil, 4)) {
+    self->takeDamage(recoil);
     return true;
   }
   else {
-    cout << "There's no PP left for this move!" << endl;
     return false;
   }
 }
 
 bool barrage::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    srand(time(NULL));
-    int a = rand() % 1000 + 1;
-    int c;
-    if (a <= 375)
-      c = 2;
-    else if (a <= 750)
-      c = 3;
-    else if (a <= 875)
-      c = 4;
-    else
-      c = 5;
-    for (int i = 0; i < c; i++) {
-      double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-	getType().effectiveness(o->getBaseStats().getType2().getName());
-      double stab = 1;
-      if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
-	stab += 0.5;
-      srand(time(NULL));
-      double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-      unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-			 ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
-      o->takeDamage(damage);
-      if (type == 0) {
-	cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-      }
-      else if (type == 2) {
-	cout << "It's super effective!" << endl;
-      }
-      else if (type == 0.5) {
-	cout << "It's not very effective..." << endl;
-      }
-    }
-    return true;
-  }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
+  return useMultipleMove(self, o, physical, 2, 5);
 }
 
-/*bool barrier::useMove(pokemon* self, pokemon* o) {
+bool barrier::useMove(pokemon* self, pokemon* o) {
   if (usePP()) {
-    self->changeDefStage(2);
-    return true;
+    return alterStat(self, def, 100, up, 2);
   }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
-}
-*/
-bool blizzard::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeStatus(4);
-    return true;
-  }
+  cout << "There's no PP left for this move!" << endl;
   return false;
+}
+
+bool blizzard::useMove(pokemon* self, pokemon* o) {
+  return useStatAlteringMove(self, o, special, frz, 10, you);
 }
 
 bool bone_club::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    //TODO: implement flinch
-    return true;
-  }
-  return false;
+    return useStatAlteringMove(self, o, physical, fln, 10, you);
 }
 
 bool bonemerang::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
-    o->takeDamage(damage);
-    o->takeDamage(damage);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
-    else if (type == 2) {
-      cout << "It's super effective!" << endl;
-    }
-    else if (type == 0.5) {
-      cout << "It's not very effective..." << endl;
-    }
-    return true;
-  }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
+  return useMultipleMove(self, o, physical, 2, 2);
 }
 
 bool bubble::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeSpeedStage(-1);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, sp, 10, you, down, -1);
 }
 
 bool bubblebeam::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeSpeedStage(-1);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, sp, 10, you, down, -1);
 }
 
 bool body_slam::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a <= 3)
-      o->changeStatus(5);
-    return true;
-  }
-  return false;
+  return useStatAlteringMove(self, o, special, prz, 10, you);
 }
 
 bool bite::useMove(pokemon* self, pokemon* o) {
-  if (usePhysicalMove(self, o)) {
-    //TODO: implement flinch
-    return true;
-  }
-  return false;
+    return useStatAlteringMove(self, o, physical, fln, 10, you);
 }
 
 bool aurora_beam::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeAtkStage(-1);
-    return true;
+  return useStatAlteringMove(self, o, special, atk, 10, you, down, -1);
+}
+
+bool amnesia::useMove(pokemon* self, pokemon* o) {
+  if (usePP()) {
+    return alterStat(self, sd, 100, up, 2);
   }
+  cout << "There's no PP left for this move!" << endl;
   return false;
 }
- 
-/*bool amnesia::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    self->changeSplDefStage(2);
-    return true;
-  }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
-}
 
-bool agility::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    self->changeSpeedStage(2);
-    return true;
-  }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
-}
-
-bool acid_armor::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    self->changeDefStage(2);
-    return true;
-  }
-  else {
-    cout << "There's no PP left for this move!" << endl;
-    return false;
-  }
-}*/
-
-bool acid::useMove(pokemon* self, pokemon* o) {
-  if (useSpecialMove(self, o)) {
-    srand(time(NULL));
-    int a = rand() % 10 + 1;
-    if (a == 1)
-      o->changeDefStage(-1);
-    return true;
-  }
-  return false;
-}
 
 bool absorb::useMove(pokemon* self, pokemon* o) {
-  if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == getType() || self->getBaseStats().getType2() == getType())
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)getPower() + 2) * modifier;
-    unsigned healAmt = ceil(damage / 2);
-    o->takeDamage(damage);
+  unsigned healAmt = 0;
+  if (useRecoilorHealMove(self, o, special, healAmt, 2)) {
     self->heal_hp(healAmt);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
-    else if (type == 2) {
-      cout << "It's super effective!" << endl;
-    }
-    else if (type == 0.5) {
-      cout << "It's not very effective..." << endl;
-    }
     return true;
   }
+
   else {
-    cout << "There's no PP left for this move!" << endl;
     return false;
   }
 }
@@ -505,7 +278,7 @@ bool splash::useMove(pokemon* self, pokemon* o) {
 }
 
 bool swift::useMove(pokemon* self, pokemon* o) {
-  return usePhysicalMove(self, o);
+  return useAttackMove(self, o, physical);
 }
 
 bool dragon_rage::useMove(pokemon* self, pokemon* o) {
@@ -521,10 +294,8 @@ bool struggle::usePP() { return 1; }
 //struggle is a "typeless move", meaning it unaffected by type nor does it have STAB
 //The pokemon that used it will also have recoil damage.
 bool struggle::useMove(pokemon* self, pokemon* o) {
-  srand(time(NULL));
-  double modifier = ((((double)(rand() % 16)) / 100) + 0.85);
-  unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		     ((double)self->getAtk() / (double)self->getDef()) * (double)getPower() + 2) * modifier;
+  double e;
+  unsigned damage = getDamage(self, o, physical, e);
   unsigned recoil = damage / 4;
   o->takeDamage(damage);
   self->takeDamage(recoil);
@@ -577,26 +348,75 @@ bool attack::add_maxpp() {
   return 0;
 }
 
-bool attack::usePhysicalMove(pokemon* self, pokemon* o)  {
+unsigned attack::getDamage(pokemon* self, pokemon* o, category c, double& effectiveness) {
+  unsigned damage;
+  effectiveness = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
+    getType().effectiveness(o->getBaseStats().getType2().getName());
+  double stab = 1;
+  if (self->getBaseStats().getType1() == m_type || self->getBaseStats().getType2() == m_type)
+    stab += 0.5;
+  srand(time(NULL));
+  double modifier = effectiveness * stab * ((((double)(rand() % 16)) / 100) + 0.85);
+  if (c == physical) {
+    damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+          ((double)self->getAtk() / (double)self->getDef()) * (double)m_power + 2) * modifier;
+  }
+  else {
+    damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
+           ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)m_power + 2) * modifier;
+  }
+  return damage;
+}
+
+void attack::printEffectiveness(double effectiveness, pokemon* o) {
+  if (effectiveness == 0) {
+    cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
+  }
+  else if (effectiveness == 2) {
+    cout << "It's super effective!" << endl;
+  }
+  else if (effectiveness == 0.5) {
+    cout << "It's not very effective..." << endl;
+  }
+}
+
+bool attack::useAttackMove(pokemon* self, pokemon* o, category c)  {
   if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == m_type || self->getBaseStats().getType2() == m_type)
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getAtk() / (double)self->getDef()) * (double)m_power + 2) * modifier;
+    double e;
+    unsigned damage = getDamage(self, o, c, e);
     o->takeDamage(damage);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
-    else if (type == 2) {
-      cout << "It's super effective!" << endl;
-    }
-    else if (type == 0.5) {
-      cout << "It's not very effective..." << endl;
+    printEffectiveness(e, o);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool attack::useRecoilorHealMove(pokemon* self, pokemon* o, category c, unsigned& amt, unsigned fraction) {
+  if (usePP()) {
+    double e;
+    unsigned damage = getDamage(self, o, c, e);
+    amt = ceil(damage / fraction);
+    o->takeDamage(damage);
+    printEffectiveness(e, o);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+bool attack::useStatAlteringMove(pokemon* self, pokemon* o, category c, battleStat s, prob p, whichPokemon w, upOrDown u, int amt) {
+  if (usePP()) {
+    double e;
+    unsigned damage = getDamage(self, o, c, e);
+    o->takeDamage(damage);
+    printEffectiveness(e, o);
+    if (e != 0) {
+      bool statChanged = ((w == me) ? alterStat(self, s, p, u, amt) : alterStat(o, s, p, u, amt));
     }
     return true;
   }
@@ -606,26 +426,14 @@ bool attack::usePhysicalMove(pokemon* self, pokemon* o)  {
   }
 }
 
-bool attack::useSpecialMove(pokemon* self, pokemon* o)  {
+bool attack::useStatAlteringMove(pokemon* self, pokemon* o, category c, Status s, prob p, whichPokemon w) {
   if (usePP()) {
-    double type = (getType().effectiveness(o->getBaseStats().getType1().getName())) *
-      getType().effectiveness(o->getBaseStats().getType2().getName());
-    double stab = 1;
-    if (self->getBaseStats().getType1() == m_type || self->getBaseStats().getType2() == m_type)
-      stab += 0.5;
-    srand(time(NULL));
-    double modifier = type * stab * ((((double)(rand() % 16)) / 100) + 0.85);
-    unsigned damage = ((((double)(self->getLevel() << 1) + 10) / 250) *
-		       ((double)self->getSplAtk() / (double)self->getSplDef()) * (double)m_power + 2) * modifier;
+    double e;
+    unsigned damage = getDamage(self, o, c, e);
     o->takeDamage(damage);
-    if (type == 0) {
-      cout << "It doesn't affect enemy " << o->getNickName() << "!" << endl;
-    }
-    else if (type == 2) {
-      cout << "It's super effective!" << endl;
-    }
-    else if (type == 0.5) {
-      cout << "It's not very effective..." << endl;
+    printEffectiveness(e, o);
+    if (e != 0) {
+      bool statusChanged = ((w == me) ? inflictStatusEffect(self, s, p) : inflictStatusEffect(o, s, p));
     }
     return true;
   }
@@ -633,4 +441,76 @@ bool attack::useSpecialMove(pokemon* self, pokemon* o)  {
     cout << "There's no PP left for this move!" << endl;
     return false;
   }
+}
+
+bool attack::alterStat(pokemon* affected, battleStat s, prob p, upOrDown u, int amt) {
+  srand(time(NULL));
+  int a = random_int_in_range(1, 100);
+  if (a <= p) {
+    switch(s) {
+      case atk:
+      affected->changeAtkStage(amt);
+      break;
+      case def:
+      affected->changeDefStage(amt);
+      break;
+      case sa:
+      affected->changeSplAtkStage(amt);
+      break;
+      case sd:
+      affected->changeSplDefStage(amt);
+      break;
+      case sp:
+      affected->changeSpeedStage(amt);
+      break;
+      default:
+      break;
+    }
+    return true;
+  }
+  return false;
+}
+
+bool attack::inflictStatusEffect(pokemon* affected, Status s, prob p) {
+  srand(time(NULL));
+  int a = random_int_in_range(1, 100);
+  if (a <= p) {
+    affected->changeStatus(s);
+    return true;
+  }
+  return false;
+}
+
+bool attack::useMultipleMove(pokemon* self, pokemon* o, category c, int min, int max) {
+  if (usePP()) {
+    int numTimes = random_int_in_range(min, max);
+    double e;
+    for (int i = 0; i < numTimes; i++) {
+      unsigned damage = getDamage(self, o, c, e);
+      o->takeDamage(damage);
+    }
+    printEffectiveness(e, o);
+    return true;
+  }
+  else {
+    cout << "There's no PP left for this move!" << endl;
+    return false;
+  }
+}
+
+int attack::random_int_in_range( int first, int last ) {
+  /* This function implements the method recommended by the knowing
+   * folks at comp.lang.c: http://c-faq.com/lib/randrange.html
+   * Returns an integer in [first, last].
+   */
+  unsigned int N = (last - first <= RAND_MAX)  /* Make sure the algorithm    */
+                 ? (last - first + 1U)         /* terminates by keeping N    */
+                 : (RAND_MAX + 1U);            /* in rand()'s maximum range. */
+  unsigned int x = (RAND_MAX + 1U) / N;
+  unsigned int y = x * N;
+  unsigned int r;
+  do {
+    r = rand();
+  } while (r >= y);
+  return r / x + first;
 }
