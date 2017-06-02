@@ -1,4 +1,4 @@
-#Welcome to Pokemon Labs.
+# Welcome to Pokemon Labs.
 
 In the region of Kanto, Professor Oak has discovered a method to make any pokemon learn any move!
 This groundbreaking discovery has lead to Pokemon learning moves they couldn't dream of learning.
@@ -8,7 +8,7 @@ You can currently battle the computer with a randomly generated pokemon or view 
 
 There currently exists a pool of 30 moves for the pokemon to learn from.
 
-##TODO (just in case I left anything out in the individual files):
+## TODO (just in case I left anything out in the individual files):
 
 
 * Implement graphics (top priority)
@@ -19,7 +19,7 @@ There currently exists a pool of 30 moves for the pokemon to learn from.
 * Implement charging moves
 * Implement effects of certain moves (some moves have unique effects, such as earthquake, hyper beam, etc)
 
-##Moves not implemented yet:
+## Moves not implemented yet:
 
 * Bide (need to implement a damage counter, not attack for 2 turns)
 * Bind (need to implement a way to prevent other player from attacking when using)

@@ -24,16 +24,16 @@ pokemon::pokemon(pokeStat base, unsigned iv[],
 
 void pokemon::makeMoveset() {
   int a = h.getSize();
-  int move1 = rand() % a + 1;
-  int move2 = rand() % a + 1;
+  int move1 = random_int_in_range(1, a) + 1;
+  int move2 = random_int_in_range(1, a) + 1;
   while(move2 == move1)
-    move2 = rand() % a + 1;
-  int move3 = rand() % a + 1;
+    move2 = random_int_in_range(1, a) + 1;
+  int move3 =random_int_in_range(1, a) + 1;
   while(move3 == move2 || move3 == move1)
-    move3 = rand() % a + 1;
-  int move4 = rand() % a + 1;
+    move3 = random_int_in_range(1, a) + 1;
+  int move4 = random_int_in_range(1, a) + 1;
   while(move4 == move3 || move4 == move2 || move4 == move1)
-    move4 = rand() % a + 1;
+    move4 = random_int_in_range(1, a) + 1;
   moveList[0] = h.getEntryAt(move1);
   moveList[1] = h.getEntryAt(move2);
   moveList[2] = h.getEntryAt(move3);

@@ -8,7 +8,7 @@
 using namespace std;
 
 arena::arena() {
- 
+
 }
 
 void arena::intro() {
@@ -60,7 +60,7 @@ void arena::play() {
       cin.ignore(10000, '\n');
       cin >> a;
      }
-    int b = rand() % 4 + 1;
+    int b = random_int_in_range(1, 4) + 1;
     if (player->getSpeed() >= opponent->getSpeed()) {
       cout << player->getNickName() << " used " << player->getMove(a)->getName() << "!" << endl;
       player->getMove(a)->useMove(player, opponent);
@@ -82,8 +82,8 @@ void arena::play() {
   cout << player->getNickName() << " HP: " << player->getHP() << endl;
   cout << opponent->getNickName() << " HP: " << opponent->getHP() << endl;
   cout << "---------------------------" << endl;
-  if (player->getHP() == 0) 
-    if (opponent->getHP() == 0) 
+  if (player->getHP() == 0)
+    if (opponent->getHP() == 0)
       cout << "It ended in a draw!" << endl;
     else
       cout << "The opponent won!" << endl;
@@ -97,8 +97,8 @@ void arena::generatePokemon() {
   int a[2];
   srand(time(NULL));
   unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  a[0] = rand() % 151 + 1;
-  a[1] = rand() % 151 + 1;
+  a[0] = random_int_in_range(1, 151) + 1;
+  a[1] = random_int_in_range(1, 151) + 1;
   trainer = p.getEntryAt(a[0]);
   cpu = p.getEntryAt(a[1]);
   default_random_engine generator(seed);
@@ -108,12 +108,11 @@ void arena::generatePokemon() {
   unsigned level1 = distribution(generator);
   unsigned level2 = distribution(generator);
   for (int i = 0; i < 4; i++) {
-    iv1[i] = rand() % 16 + 1;
-    iv2[i] = rand() % 16 + 1;
+    iv1[i] = random_int_in_range(1, 16) + 1;
+    iv2[i] = random_int_in_range(1, 16) + 1;
   }
   player = new pokemon(*trainer, iv1, level1);
   opponent = new pokemon(*cpu, iv2, level2);
   player->makeMoveset();
   opponent->makeMoveset();
 }
-

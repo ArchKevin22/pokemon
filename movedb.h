@@ -47,7 +47,6 @@ class attack {
   virtual bool usePP();
   void heal_pp(unsigned n);
   bool add_maxpp();
-  int random_int_in_range(int first, int last);
 
  private:
   unsigned m_power;
